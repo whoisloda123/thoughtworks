@@ -1,6 +1,6 @@
 package com.liucan.thoughtworks;
 
-import com.liucan.thoughtworks.strategy.DefaultSessionStragegy;
+import com.liucan.thoughtworks.strategy.DefaultSessionStrategy;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import org.junit.Test;
  * @version 19-9-2
  */
 public class ConferenceManagerTest extends BaseJunit4Test {
-    private ConferenceManager conferenceManager = new ConferenceManager(new DefaultSessionStragegy());
+    private ConferenceManager conferenceManager = new ConferenceManager(new DefaultSessionStrategy());
 
     @Before
     public void before() {

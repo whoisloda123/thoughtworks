@@ -11,14 +11,14 @@ import java.util.List;
  * @author liucan
  * @version 19-9-2
  */
-public interface SessionStragegy {
+public interface SessionStrategy {
     /**
      * 根据传入的talksList获取所有可能的上午session
      */
-    List<Session> morningSession(List<Talk> talksList, int totalPossibleTracks);
+    List<Session> morningSession(List<Talk> talksList);
 
     /**
      * 根据传入的talksList获取所有可能的下午session
      */
-    List<Session> afternoonSession(List<Talk> talksList, int totalPossibleTracks);
+    List<Session> afternoonSession(List<Talk> talksList);
 }

@@ -5,11 +5,13 @@ package com.liucan.thoughtworks.talk;
  * @version 19-9-1
  */
 public class Talk {
+    //title，如Writing Fast Tests Against Enterprise Rails 60min
     private String title;
+    //talk名字，如Writing Fast Tests Against Enterprise Rails
     private String name;
     //持续时间，分
     private int duration;
-    //是否已经处理过
+    //是否已经安排过
     private boolean scheduled = false;
     //具体开始的时间
     private String startTime;
@@ -43,10 +45,4 @@ public class Talk {
     public String getTitle() {
         return title;
     }
-
-//    @Override
-//    public int compareTo(Object obj) {
-//        Talk talk = (Talk)obj;
-//        return Integer.compare(talk.timeDuration, this.timeDuration);
-//    }
 }

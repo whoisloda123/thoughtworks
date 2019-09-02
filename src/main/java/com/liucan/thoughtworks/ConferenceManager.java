@@ -3,7 +3,8 @@ package com.liucan.thoughtworks;
 import com.liucan.thoughtworks.session.LunchSession;
 import com.liucan.thoughtworks.session.NetworkingEvnetSession;
 import com.liucan.thoughtworks.session.Session;
-import com.liucan.thoughtworks.strategy.SessionStragegy;
+import com.liucan.thoughtworks.strategy.DefaultSessionStrategy;
+import com.liucan.thoughtworks.strategy.SessionStrategy;
 import com.liucan.thoughtworks.talk.Talk;
 import com.liucan.thoughtworks.track.Track;
 import com.liucan.thoughtworks.util.ConferenceUtil;
@@ -22,11 +23,11 @@ import java.util.List;
  * @version 19-9-2
  */
 public class ConferenceManager {
-    private SessionStragegy sessionStragegy;
+    private SessionStrategy sessionStrategy;
     private List<Track> tracks = new ArrayList<>();
 
-    public ConferenceManager(SessionStragegy sessionStragegy) {
-        this.sessionStragegy = sessionStragegy;
+    public ConferenceManager(SessionStrategy sessionStrategy) {
+        this.sessionStrategy = sessionStrategy;
     }
 
     private List<Track> getScheduledTalksList(List<Session> morningSessions, List<Session> afternoonSessions) {
@@ -60,7 +61,6 @@ public class ConferenceManager {
             }
 
             //Networking Event
-            // Scheduled Networking Event at the end of session, Time duration is just to initialize the Talk object.
             Talk networkingTalk = new Talk("Networking Event", "Networking Event", 60);
             networkingTalk.setStartTime(scheduledTime);
             NetworkingEvnetSession networkingEvnetSession = new NetworkingEvnetSession(networkingTalk);
@@ -78,12 +78,15 @@ public class ConferenceManager {
         talkList.sort(Comparator.comparing(Talk::getDuration).reversed());
 
         int totalPossibleTracks = ConferenceUtil.getTotalTalksTime(talkList) / (6 * 60);
+        if (sessionStrategy instanceof DefaultSessionStrategy) {
+            ((DefaultSessionStrategy) sessionStrategy).setTotalPossibleTracks(totalPossibleTracks);
+        }
 
-        List<Session> morningSessions = sessionStragegy.morningSession(talkList, totalPossibleTracks);
+        List<Session> morningSessions = sessionStrategy.morningSession(talkList);
         //删除已经有的上午session
         morningSessions.forEach(e -> talkList.removeAll(e.sessions()));
 
-        List<Session> afternoonSessions = sessionStragegy.afternoonSession(talkList, totalPossibleTracks);
+        List<Session> afternoonSessions = sessionStrategy.afternoonSession(talkList);
         //删除已经有的下午session
         afternoonSessions.forEach(e -> talkList.removeAll(e.sessions()));
 

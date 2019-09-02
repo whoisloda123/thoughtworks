@@ -15,16 +15,16 @@ import java.util.List;
  * @author liucan
  * @version 19-9-2
  */
-public class DefaultSessionStragegy implements SessionStragegy {
+public class DefaultSessionStrategy implements SessionStrategy {
+    private int totalPossibleTracks;
 
     /**
      * 根据传入的talksList获取所有可能的上午session
      */
     @Override
-    public List<Session> morningSession(List<Talk> talksList, int totalPossibleTracks) {
-        int minSessionTimeLimit = ConferenceUtil.MIN_SESSION_TIME;
-        int maxSessionTimeLimit = ConferenceUtil.MIN_SESSION_TIME;
+    public List<Session> morningSession(List<Talk> talksList) {
         int possibleCombinationCount = 0;
+        int maxSessionTimeLimit = ConferenceUtil.MIN_SESSION_TIME;
 
         List<Session> sessions = new ArrayList<>();
 
@@ -41,9 +41,10 @@ public class DefaultSessionStragegy implements SessionStragegy {
                     continue;
                 }
                 int currentTalkTime = currentTalk.getDuration();
-                // If the current talk time is greater than maxSessionTimeLimit or
-                // sum of the current time and total of talk time added in list  is greater than maxSessionTimeLimit.
-                // then continue.
+                /**
+                 * 如果当前talk时间大于最大session时间，continue
+                 * 如果当前talk时间和totalTime大于最大session时间,continue
+                 */
                 if (currentTalkTime > maxSessionTimeLimit || currentTalkTime + totalTime > maxSessionTimeLimit) {
                     continue;
                 }
@@ -73,7 +74,7 @@ public class DefaultSessionStragegy implements SessionStragegy {
      * 根据传入的talksList获取所有可能的下午session
      */
     @Override
-    public List<Session> afternoonSession(List<Talk> talksList, int totalPossibleTracks) {
+    public List<Session> afternoonSession(List<Talk> talksList) {
         int minSessionTimeLimit = ConferenceUtil.MIN_SESSION_TIME;
         int maxSessionTimeLimit = ConferenceUtil.MAX_SESSION_TIME;
         int possibleCombinationCount = 0;
@@ -93,9 +94,10 @@ public class DefaultSessionStragegy implements SessionStragegy {
                     continue;
                 }
                 int currentTalkTime = currentTalk.getDuration();
-                // If the current talk time is greater than maxSessionTimeLimit or
-                // sum of the current time and total of talk time added in list  is greater than maxSessionTimeLimit.
-                // then continue.
+                /**
+                 * 如果当前talk时间大于最大session时间，continue
+                 * 如果当前talk时间和totalTime大于最大session时间,continue
+                 */
                 if (currentTalkTime > maxSessionTimeLimit || currentTalkTime + totalTime > maxSessionTimeLimit) {
                     continue;
                 }
@@ -120,4 +122,13 @@ public class DefaultSessionStragegy implements SessionStragegy {
         }
         return sessions;
     }
+
+    public int getTotalPossibleTracks() {
+        return totalPossibleTracks;
+    }
+
+    public void setTotalPossibleTracks(int totalPossibleTracks) {
+        this.totalPossibleTracks = totalPossibleTracks;
+    }
+
 }
