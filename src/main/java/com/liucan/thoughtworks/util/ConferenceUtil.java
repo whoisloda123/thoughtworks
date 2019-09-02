@@ -16,6 +16,9 @@ public class ConferenceUtil {
     //午餐时间长度，分
     public final static int LUNCH_DURATION = 60;
 
+    /**
+     * 获取talksList总的duration时间
+     */
     public static int getTotalTalksTime(List<Talk> talksList) {
         if (talksList == null || talksList.isEmpty()) {
             return 0;

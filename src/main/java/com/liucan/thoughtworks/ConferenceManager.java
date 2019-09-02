@@ -46,7 +46,7 @@ public class ConferenceManager {
             }
 
             //设置午餐
-            Talk lunchTalk = new Talk("Lunch", "Lunch", ConferenceUtil.LUNCH_DURATION);
+            Talk lunchTalk = new Talk("Lunch", ConferenceUtil.LUNCH_DURATION);
             lunchTalk.setStartTime(scheduledTime);
             LunchSession lunchSession = new LunchSession(lunchTalk);
 
@@ -61,7 +61,7 @@ public class ConferenceManager {
             }
 
             //Networking Event
-            Talk networkingTalk = new Talk("Networking Event", "Networking Event", 60);
+            Talk networkingTalk = new Talk("Networking Event", 60);
             networkingTalk.setStartTime(scheduledTime);
             NetworkingEvnetSession networkingEvnetSession = new NetworkingEvnetSession(networkingTalk);
 
@@ -89,27 +89,6 @@ public class ConferenceManager {
         List<Session> afternoonSessions = sessionStrategy.afternoonSession(talkList);
         //删除已经有的下午session
         afternoonSessions.forEach(e -> talkList.removeAll(e.sessions()));
-
-        //如果talkList还有数据，则看能否将剩下的session放入下午session
-        if (!talkList.isEmpty()) {
-            for (Session session : afternoonSessions) {
-                List<Talk> lastAddTalkList = new ArrayList<>();
-                List<Talk> talks = session.sessions();
-                int totalTime = ConferenceUtil.getTotalTalksTime(talks);
-                talkList.forEach(talk -> {
-                    if (talk.getDuration() + totalTime <= ConferenceUtil.MAX_SESSION_TIME) {
-                        talk.setScheduled(true);
-                        session.addTalk(talk);
-                        lastAddTalkList.add(talk);
-                    }
-                });
-
-                talkList.removeAll(lastAddTalkList);
-                if (!talkList.isEmpty()) {
-                    break;
-                }
-            }
-        }
 
         //如果talkList还不为空,则分配不成功
         if (!talkList.isEmpty()) {

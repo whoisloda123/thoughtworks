@@ -1,9 +1,12 @@
 package com.liucan.thoughtworks;
 
 import com.liucan.thoughtworks.strategy.DefaultSessionStrategy;
+import com.liucan.thoughtworks.track.Track;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 /**
  * @author liucan
@@ -24,7 +27,11 @@ public class ConferenceManagerTest extends BaseJunit4Test {
 
     @Test
     public void tracks() {
-        conferenceManager.tracks("input.txt");
+        List<Track> tracks = conferenceManager.tracks("input.txt");
+        if (tracks.isEmpty()) {
+            System.out.println("未分配成功！");
+            return;
+        }
         String s = conferenceManager.toString();
         System.out.println(s);
     }

@@ -58,6 +58,6 @@ public class TalkParserUtil {
         } else if (timeStr.endsWith(lightningSuffix)) {
             time = 5;
         }
-        return new Talk(talk, name, time);
+        return new Talk(talk, time);
     }
 }

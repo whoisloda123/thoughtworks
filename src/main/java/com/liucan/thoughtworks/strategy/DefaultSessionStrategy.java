@@ -16,6 +16,7 @@ import java.util.List;
  * @version 19-9-2
  */
 public class DefaultSessionStrategy implements SessionStrategy {
+    //用来限制最大tracks
     private int totalPossibleTracks;
 
     /**
@@ -37,7 +38,7 @@ public class DefaultSessionStrategy implements SessionStrategy {
                 int currentCount = start;
                 start++;
                 Talk currentTalk = talksList.get(currentCount);
-                if (currentTalk.isScheduled()) {
+                if (currentTalk.isArrange()) {
                     continue;
                 }
                 int currentTalkTime = currentTalk.getDuration();
@@ -58,7 +59,7 @@ public class DefaultSessionStrategy implements SessionStrategy {
 
             //有效session
             if (totalTime == maxSessionTimeLimit) {
-                possibleCombinationList.forEach(e -> e.setScheduled(true));
+                possibleCombinationList.forEach(e -> e.setArrange(true));
                 sessions.add(new MorningSession(possibleCombinationList));
 
                 possibleCombinationCount++;
@@ -90,7 +91,7 @@ public class DefaultSessionStrategy implements SessionStrategy {
                 int currentCount = start;
                 start++;
                 Talk currentTalk = talksList.get(currentCount);
-                if (currentTalk.isScheduled()) {
+                if (currentTalk.isArrange()) {
                     continue;
                 }
                 int currentTalkTime = currentTalk.getDuration();
@@ -111,7 +112,7 @@ public class DefaultSessionStrategy implements SessionStrategy {
 
             //有效session
             if (totalTime >= minSessionTimeLimit && totalTime <= maxSessionTimeLimit) {
-                possibleCombinationList.forEach(e -> e.setScheduled(true));
+                possibleCombinationList.forEach(e -> e.setArrange(true));
                 sessions.add(new AfternoonSession(possibleCombinationList));
 
                 possibleCombinationCount++;
