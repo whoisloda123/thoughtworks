@@ -21,12 +21,10 @@ public class DefaultSessionStragegy implements SessionStragegy {
      * 根据传入的talksList获取所有可能的上午session
      */
     @Override
-    public List<Session> morningSession(List<Talk> talksList) {
+    public List<Session> morningSession(List<Talk> talksList, int totalPossibleTracks) {
         int minSessionTimeLimit = ConferenceUtil.MIN_SESSION_TIME;
         int maxSessionTimeLimit = ConferenceUtil.MIN_SESSION_TIME;
         int possibleCombinationCount = 0;
-        int totalPossibleTracks = ConferenceUtil.getTotalTalksTime(talksList) / 6 * 60;
-
 
         List<Session> sessions = new ArrayList<>();
 
@@ -75,12 +73,10 @@ public class DefaultSessionStragegy implements SessionStragegy {
      * 根据传入的talksList获取所有可能的下午session
      */
     @Override
-    public List<Session> afternoonSession(List<Talk> talksList) {
+    public List<Session> afternoonSession(List<Talk> talksList, int totalPossibleTracks) {
         int minSessionTimeLimit = ConferenceUtil.MIN_SESSION_TIME;
         int maxSessionTimeLimit = ConferenceUtil.MAX_SESSION_TIME;
         int possibleCombinationCount = 0;
-        int totalPossibleTracks = ConferenceUtil.getTotalTalksTime(talksList) / 6 * 60;
-
 
         List<Session> sessions = new ArrayList<>();
 

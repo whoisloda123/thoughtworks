@@ -27,4 +27,9 @@ public class LunchSession implements Session {
     public void addTalk(Talk talk) {
         this.talk = talk;
     }
+
+    @Override
+    public String toString() {
+        return talk.getStartTime() + " " + talk.getTitle() + System.lineSeparator();
+    }
 }

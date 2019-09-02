@@ -23,4 +23,12 @@ public class Track {
         this.afternoonSession = afternoonSession;
         this.networkingSession = networkingSession;
     }
+
+    @Override
+    public String toString() {
+        return morningSession.toString()
+                + lunchSession.toString()
+                + afternoonSession.toString()
+                + networkingSession.toString();
+    }
 }

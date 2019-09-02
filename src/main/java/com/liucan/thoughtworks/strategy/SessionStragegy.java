@@ -15,10 +15,10 @@ public interface SessionStragegy {
     /**
      * 根据传入的talksList获取所有可能的上午session
      */
-    List<Session> morningSession(List<Talk> talksList);
+    List<Session> morningSession(List<Talk> talksList, int totalPossibleTracks);
 
     /**
      * 根据传入的talksList获取所有可能的下午session
      */
-    List<Session> afternoonSession(List<Talk> talksList);
+    List<Session> afternoonSession(List<Talk> talksList, int totalPossibleTracks);
 }

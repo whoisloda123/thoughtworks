@@ -22,51 +22,41 @@ import java.util.List;
  * @version 19-9-2
  */
 public class ConferenceManager {
-    private final static String INPUT_FILE = "input.txt";
-
     private SessionStragegy sessionStragegy;
+    private List<Track> tracks = new ArrayList<>();
 
     public ConferenceManager(SessionStragegy sessionStragegy) {
         this.sessionStragegy = sessionStragegy;
     }
 
     private List<Track> getScheduledTalksList(List<Session> morningSessions, List<Session> afternoonSessions) {
-        List<Track> tracks = new ArrayList<>();
         int totalPossibleTracks = morningSessions.size();
 
         for (int trackIndex = 0; trackIndex < totalPossibleTracks; trackIndex++) {
-            System.out.println("Track " + trackIndex + 1 + ":");
-
-
             LocalTime time = LocalTime.of(9, 0);
-            String scheduledTime = time.format(DateTimeFormatter.ofPattern("hh:mma "));
+            String scheduledTime = time.format(DateTimeFormatter.ofPattern("hh:mma"));
 
             //设置上午
             Session mornSession = morningSessions.get(trackIndex);
             for (Talk talk : mornSession.sessions()) {
                 talk.setStartTime(scheduledTime);
-                System.out.println(scheduledTime + talk.getTitle());
-
                 time = time.plusMinutes(talk.getDuration());
-                scheduledTime = time.format(DateTimeFormatter.ofPattern("hh:mma "));
+                scheduledTime = time.format(DateTimeFormatter.ofPattern("hh:mma"));
             }
 
             //设置午餐
             Talk lunchTalk = new Talk("Lunch", "Lunch", ConferenceUtil.LUNCH_DURATION);
             lunchTalk.setStartTime(scheduledTime);
             LunchSession lunchSession = new LunchSession(lunchTalk);
-            System.out.println(scheduledTime + "Lunch");
 
             //设置下午session
             time = time.plusMinutes(ConferenceUtil.LUNCH_DURATION);
-            scheduledTime = time.format(DateTimeFormatter.ofPattern("hh:mma "));
+            scheduledTime = time.format(DateTimeFormatter.ofPattern("hh:mma"));
             Session afternoonSession = afternoonSessions.get(trackIndex);
             for (Talk talk : afternoonSession.sessions()) {
                 talk.setStartTime(scheduledTime);
-                System.out.println(scheduledTime + talk.getTitle());
-
                 time = time.plusMinutes(talk.getDuration());
-                scheduledTime = time.format(DateTimeFormatter.ofPattern("hh:mma "));
+                scheduledTime = time.format(DateTimeFormatter.ofPattern("hh:mma"));
             }
 
             //Networking Event
@@ -74,7 +64,6 @@ public class ConferenceManager {
             Talk networkingTalk = new Talk("Networking Event", "Networking Event", 60);
             networkingTalk.setStartTime(scheduledTime);
             NetworkingEvnetSession networkingEvnetSession = new NetworkingEvnetSession(networkingTalk);
-            System.out.println(scheduledTime + "Networking Event\n");
 
             tracks.add(new Track(mornSession, lunchSession, afternoonSession, networkingEvnetSession));
         }
@@ -85,14 +74,16 @@ public class ConferenceManager {
      * 获取所有tracks
      */
     public List<Track> tracks(String file) {
-        List<Talk> talkList = new TalkParserUtil().getTalksFromFile(INPUT_FILE);
+        List<Talk> talkList = new TalkParserUtil().getTalksFromFile(file);
         talkList.sort(Comparator.comparing(Talk::getDuration).reversed());
 
-        List<Session> morningSessions = sessionStragegy.morningSession(talkList);
+        int totalPossibleTracks = ConferenceUtil.getTotalTalksTime(talkList) / (6 * 60);
+
+        List<Session> morningSessions = sessionStragegy.morningSession(talkList, totalPossibleTracks);
         //删除已经有的上午session
         morningSessions.forEach(e -> talkList.removeAll(e.sessions()));
 
-        List<Session> afternoonSessions = sessionStragegy.afternoonSession(talkList);
+        List<Session> afternoonSessions = sessionStragegy.afternoonSession(talkList, totalPossibleTracks);
         //删除已经有的下午session
         afternoonSessions.forEach(e -> talkList.removeAll(e.sessions()));
 
@@ -123,5 +114,16 @@ public class ConferenceManager {
         }
 
         return getScheduledTalksList(morningSessions, afternoonSessions);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int trackIndex = 0; trackIndex < tracks.size(); trackIndex++) {
+            stringBuilder.append("Track " + (trackIndex + 1) + ":");
+            stringBuilder.append(System.lineSeparator());
+            stringBuilder.append(tracks.get(trackIndex).toString());
+        }
+        return stringBuilder.toString();
     }
 }

@@ -5,6 +5,12 @@ import com.liucan.thoughtworks.strategy.DefaultSessionStragegy;
 public class Main {
 
     public static void main(String[] args) {
-        new ConferenceManager(new DefaultSessionStragegy()).tracks("input.txt");
+        ConferenceManager conferenceManager = new ConferenceManager(new DefaultSessionStragegy());
+        conferenceManager.tracks("input.txt");
+
+        System.out.println("---------这是分割线------------- ");
+
+        String s = conferenceManager.toString();
+        System.out.println(s);
     }
 }
