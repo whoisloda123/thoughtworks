@@ -1,232 +1,127 @@
 package com.liucan.thoughtworks;
 
-import java.text.SimpleDateFormat;
+import com.liucan.thoughtworks.session.LunchSession;
+import com.liucan.thoughtworks.session.NetworkingEvnetSession;
+import com.liucan.thoughtworks.session.Session;
+import com.liucan.thoughtworks.strategy.SessionStragegy;
+import com.liucan.thoughtworks.talk.Talk;
+import com.liucan.thoughtworks.track.Track;
+import com.liucan.thoughtworks.util.ConferenceUtil;
+import com.liucan.thoughtworks.util.TalkParserUtil;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
+import java.util.Comparator;
 import java.util.List;
 
 /**
+ * 会议管理
  * @author liucan
- * @version 19-9-1
+ * @version 19-9-2
  */
 public class ConferenceManager {
-    private List<Talk> talksValidList;
+    private final static String INPUT_FILE = "input.txt";
 
-    public ConferenceManager(List<Talk> talksValidList) {
-        this.talksValidList = talksValidList;
+    private SessionStragegy sessionStragegy;
+
+    public ConferenceManager(SessionStragegy sessionStragegy) {
+        this.sessionStragegy = sessionStragegy;
     }
 
-    public List<List<Talk>> scheduleConferenceWithInformationFromFile() throws Exception {
-        return getScheduleConferenceTrack(talksValidList);
-    }
+    private List<Track> getScheduledTalksList(List<Session> morningSessions, List<Session> afternoonSessions) {
+        List<Track> tracks = new ArrayList<>();
+        int totalPossibleTracks = morningSessions.size();
 
-    protected List<List<Talk>> getScheduleConferenceTrack(List<Talk> talksList) throws Exception {
-        // Find the total possible days.
-        int perDayMinTime = 6 * 60;
-        int totalTalksTime = getTotalTalksTime(talksList);
-        int totalPossibleDays = totalTalksTime/perDayMinTime;
-        // Sort the talkList.
-        List<Talk> talksListForOperation = new ArrayList<Talk>();
-        talksListForOperation.addAll(talksList);
-        Collections.sort(talksListForOperation);
-        // Find possible combinations for the morning session.
-        List<List<Talk>> morningSessions = findPossibleCombSession(talksListForOperation, totalPossibleDays, true);
-        // Remove all the scheduled talks for morning session, from the operationList.
-        for(List<Talk> talkList : morningSessions) {
-            talksListForOperation.removeAll(talkList);
-        }
-        // Find possible combinations for the evening session.
-        List<List<Talk>> eveningSessions = findPossibleCombSession(talksListForOperation, totalPossibleDays, false);
-        // Remove all the scheduled talks for evening session, from the operationList.
-        for(List<Talk> talkList : eveningSessions) {
-            talksListForOperation.removeAll(talkList);
-        }
-        // check if the operation list is not empty, then try to fill all the remaining talks in evening session.
-        int maxSessionTimeLimit = 240;
-        if(!talksListForOperation.isEmpty()) {
-            List<Talk> scheduledTalkList = new ArrayList<Talk>();
-            for(List<Talk> talkList : eveningSessions) {
-                int totalTime = getTotalTalksTime(talkList);
+        for (int trackIndex = 0; trackIndex < totalPossibleTracks; trackIndex++) {
+            System.out.println("Track " + trackIndex + 1 + ":");
 
-                for(Talk talk : talksListForOperation) {
-                    int talkTime = talk.getTimeDuration();
 
-                    if(talkTime + totalTime <= maxSessionTimeLimit) {
-                        talkList.add(talk);
-                        talk.setScheduled(true);
-                        scheduledTalkList.add(talk);
-                    }
-                }
+            LocalTime time = LocalTime.of(9, 0);
+            String scheduledTime = time.format(DateTimeFormatter.ofPattern("hh:mma "));
 
-                talksListForOperation.removeAll(scheduledTalkList);
-                if(talksListForOperation.isEmpty())
-                    break;
-            }
-        }
-        // If operation list is still not empty, its mean the conference can not be scheduled with the provided data.
-        if(!talksListForOperation.isEmpty()) {
-            throw new Exception("Unable to schedule all task for the conference.");
-        }
-        // Schedule the day event from morning session and evening session.
-        return getScheduledTalksList(morningSessions, eveningSessions);
-    }
-
-    public static int getTotalTalksTime(List<Talk> talksList) {
-        if(talksList == null || talksList.isEmpty())
-            return 0;
-
-        int totalTime = 0;
-        for(Talk talk : talksList) {
-            totalTime += talk.getTimeDuration();
-        }
-        return totalTime;
-    }
-
-    private List<List<Talk>> findPossibleCombSession(List<Talk> talksListForOperation, int totalPossibleDays, boolean morningSession){
-        int minSessionTimeLimit = 180;
-        int maxSessionTimeLimit = 240;
-
-        if(morningSession)
-            maxSessionTimeLimit = minSessionTimeLimit;
-
-        int talkListSize = talksListForOperation.size();
-        List<List<Talk>> possibleCombinationsOfTalks = new ArrayList<List<Talk>>();
-        int possibleCombinationCount = 0;
-        // Loop to get combination for total possible days.
-        // Check one by one from each talk to get possible combination.
-        for(int count = 0; count < talkListSize; count++) {
-            int startPoint = count;
-            int totalTime = 0;
-            List<Talk> possibleCombinationList = new ArrayList<Talk>();
-            // Loop to get possible combination.
-            while(startPoint != talkListSize) {
-                int currentCount = startPoint;
-                startPoint++;
-                Talk currentTalk = talksListForOperation.get(currentCount);
-                if(currentTalk.isScheduled())
-                    continue;
-                int talkTime = currentTalk.getTimeDuration();
-                // If the current talk time is greater than maxSessionTimeLimit or
-                // sum of the current time and total of talk time added in list  is greater than maxSessionTimeLimit.
-                // then continue.
-                if(talkTime > maxSessionTimeLimit || talkTime + totalTime > maxSessionTimeLimit) {
-                    continue;
-                }
-                possibleCombinationList.add(currentTalk);
-                totalTime += talkTime;
-                // If total time is completed for this session than break this loop.
-                if(morningSession) {
-                    if(totalTime == maxSessionTimeLimit)
-                        break;
-                }else if(totalTime >= minSessionTimeLimit)
-                    break;
-            }
-            // Valid session time for morning session is equal to maxSessionTimeLimit.
-            // Valid session time for evening session is less than or equal to maxSessionTimeLimit and greater than or equal to minSessionTimeLimit.
-            boolean validSession;
-            if(morningSession)
-                validSession = (totalTime == maxSessionTimeLimit);
-            else
-                validSession = (totalTime >= minSessionTimeLimit && totalTime <= maxSessionTimeLimit);
-
-            // If session is valid than add this session in the possible combination list and set all added talk as scheduled.
-            if(validSession) {
-                possibleCombinationsOfTalks.add(possibleCombinationList);
-                for(Talk talk : possibleCombinationList){
-                    talk.setScheduled(true);
-                }
-                possibleCombinationCount++;
-                if(possibleCombinationCount == totalPossibleDays)
-                    break;
-            }
-        }
-        return possibleCombinationsOfTalks;
-    }
-
-    private List<List<Talk>> getScheduledTalksList(List<List<Talk>> morningSessionsTrack, List<List<Talk>> eveningSessionsTrack){
-        List<List<Talk>> scheduledTalksList = new ArrayList<List<Talk>>();
-        int totalPossibleDays = morningSessionsTrack.size();
-
-        // for loop to schedule event for all days.
-        for(int dayCount = 0; dayCount < totalPossibleDays; dayCount++) {
-            List<Talk> talkList = new ArrayList<Talk>();
-
-            // Create a date and initialize start time 09:00 AM.
-            Date date = new Date( );
-            SimpleDateFormat dateFormat = new SimpleDateFormat ("hh:mma ");
-//            date.setTime(9);
-            date.setHours(9);
-            date.setMinutes(0);
-            date.setSeconds(0);
-
-            int trackCount = dayCount + 1;
-            String scheduledTime = dateFormat.format(date);
-
-            System.out.println("Track " + trackCount + ":");
-
-            // Morning Session - set the scheduled time in the talk and get the next time using time duration of current talk.
-            List<Talk> mornSessionTalkList = morningSessionsTrack.get(dayCount);
-            for(Talk talk : mornSessionTalkList) {
-                talk.setScheduledTime(scheduledTime);
+            //设置上午
+            Session mornSession = morningSessions.get(trackIndex);
+            for (Talk talk : mornSession.sessions()) {
+                talk.setStartTime(scheduledTime);
                 System.out.println(scheduledTime + talk.getTitle());
-                scheduledTime = getNextScheduledTime(date, talk.getTimeDuration());
-                talkList.add(talk);
+
+                time = time.plusMinutes(talk.getDuration());
+                scheduledTime = time.format(DateTimeFormatter.ofPattern("hh:mma "));
             }
 
-            // Scheduled Lunch Time for 60 min.
-            int lunchTimeDuration = 60;
-            Talk lunchTalk = new Talk("Lunch", "Lunch", 60);
-            lunchTalk.setScheduledTime(scheduledTime);
-            talkList.add(lunchTalk);
+            //设置午餐
+            Talk lunchTalk = new Talk("Lunch", "Lunch", ConferenceUtil.LUNCH_DURATION);
+            lunchTalk.setStartTime(scheduledTime);
+            LunchSession lunchSession = new LunchSession(lunchTalk);
             System.out.println(scheduledTime + "Lunch");
 
-            // Evening Session - set the scheduled time in the talk and get the next time using time duration of current talk.
-            scheduledTime = getNextScheduledTime(date, lunchTimeDuration);
-            List<Talk> eveSessionTalkList = eveningSessionsTrack.get(dayCount);
-            for(Talk talk : eveSessionTalkList) {
-                talk.setScheduledTime(scheduledTime);
-                talkList.add(talk);
+            //设置下午session
+            time = time.plusMinutes(ConferenceUtil.LUNCH_DURATION);
+            scheduledTime = time.format(DateTimeFormatter.ofPattern("hh:mma "));
+            Session afternoonSession = afternoonSessions.get(trackIndex);
+            for (Talk talk : afternoonSession.sessions()) {
+                talk.setStartTime(scheduledTime);
                 System.out.println(scheduledTime + talk.getTitle());
-                scheduledTime = getNextScheduledTime(date, talk.getTimeDuration());
+
+                time = time.plusMinutes(talk.getDuration());
+                scheduledTime = time.format(DateTimeFormatter.ofPattern("hh:mma "));
             }
 
+            //Networking Event
             // Scheduled Networking Event at the end of session, Time duration is just to initialize the Talk object.
             Talk networkingTalk = new Talk("Networking Event", "Networking Event", 60);
-            networkingTalk.setScheduledTime(scheduledTime);
-            talkList.add(networkingTalk);
+            networkingTalk.setStartTime(scheduledTime);
+            NetworkingEvnetSession networkingEvnetSession = new NetworkingEvnetSession(networkingTalk);
             System.out.println(scheduledTime + "Networking Event\n");
-            scheduledTalksList.add(talkList);
+
+            tracks.add(new Track(mornSession, lunchSession, afternoonSession, networkingEvnetSession));
         }
-        return scheduledTalksList;
+        return tracks;
     }
 
-    private String getNextScheduledTime(Date date, int timeDuration) {
-        long timeInLong  = date.getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat ("hh:mma ");
+    /**
+     * 获取所有tracks
+     */
+    public List<Track> tracks(String file) {
+        List<Talk> talkList = new TalkParserUtil().getTalksFromFile(INPUT_FILE);
+        talkList.sort(Comparator.comparing(Talk::getDuration).reversed());
 
-        long timeDurationInLong = timeDuration * 60 * 1000;
-        long newTimeInLong = timeInLong + timeDurationInLong;
+        List<Session> morningSessions = sessionStragegy.morningSession(talkList);
+        //删除已经有的上午session
+        morningSessions.forEach(e -> talkList.removeAll(e.sessions()));
 
-        date.setTime(newTimeInLong);
-        String timeString = dateFormat.format(date);
-        return timeString;
-    }
+        List<Session> afternoonSessions = sessionStragegy.afternoonSession(talkList);
+        //删除已经有的下午session
+        afternoonSessions.forEach(e -> talkList.removeAll(e.sessions()));
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ConferenceManager)) return false;
+        //如果talkList还有数据，则看能否将剩下的session放入下午session
+        if (!talkList.isEmpty()) {
+            for (Session session : afternoonSessions) {
+                List<Talk> lastAddTalkList = new ArrayList<>();
+                List<Talk> talks = session.sessions();
+                int totalTime = ConferenceUtil.getTotalTalksTime(talks);
+                talkList.forEach(talk -> {
+                    if (talk.getDuration() + totalTime <= ConferenceUtil.MAX_SESSION_TIME) {
+                        talk.setScheduled(true);
+                        session.addTalk(talk);
+                        lastAddTalkList.add(talk);
+                    }
+                });
 
-        ConferenceManager that = (ConferenceManager) o;
+                talkList.removeAll(lastAddTalkList);
+                if (!talkList.isEmpty()) {
+                    break;
+                }
+            }
+        }
 
-        if (!talksValidList.equals(that.talksValidList)) return false;
+        //如果talkList还不为空,则分配不成功
+        if (!talkList.isEmpty()) {
+            return Collections.emptyList();
+        }
 
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return 1;
+        return getScheduledTalksList(morningSessions, afternoonSessions);
     }
 }
