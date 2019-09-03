@@ -31,10 +31,10 @@ public class MorningSession implements Session {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (Talk talk : talks) {
+        talks.forEach(talk -> {
             stringBuilder.append(talk.getStartTime() + " " + talk.getTitle());
             stringBuilder.append(System.lineSeparator());
-        }
+        });
         return stringBuilder.toString();
     }
 }

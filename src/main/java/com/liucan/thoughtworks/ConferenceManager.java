@@ -32,7 +32,8 @@ public class ConferenceManager {
     }
 
     /**
-     * 获取所有tracks
+     * 解析文件获取所有tracks
+     * @param file 文件名
      */
     public List<Track> tracks(String file) {
         tracks = trackFactory.newTracks(getTalksFromFile(file));

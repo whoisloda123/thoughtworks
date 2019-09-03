@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.List;
 
 /**
+ * 会议管理测试类
  * @author liucan
  * @version 19-9-2
  */

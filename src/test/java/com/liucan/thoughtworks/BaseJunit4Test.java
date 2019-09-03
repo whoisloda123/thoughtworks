@@ -5,6 +5,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
+/**
+ * 单元测试基类
+ */
 public class BaseJunit4Test {
     @BeforeClass
     public static void beforeClass() {
