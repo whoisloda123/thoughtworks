@@ -14,6 +14,8 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
+ * 默认track工厂实现类，可添加自己实现类
+ *
  * @author liucan
  * @version 19-9-3
  */

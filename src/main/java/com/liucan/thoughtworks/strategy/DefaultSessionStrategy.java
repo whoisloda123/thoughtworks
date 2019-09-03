@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 默认session策略类,可通过继承SessionStrategy实现其他获取morningSession和afternoonSession的策略类
- *
+ * 默认实现morningSession，  afternoonSession策略类，可添加自己实现类
  *
  * @author liucan
  * @version 19-9-2

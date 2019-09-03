@@ -1,6 +1,5 @@
 package com.liucan.thoughtworks;
 
-import com.liucan.thoughtworks.conference.DefaultTrackFactory;
 import com.liucan.thoughtworks.conference.Track;
 import org.junit.After;
 import org.junit.Before;
@@ -13,7 +12,7 @@ import java.util.List;
  * @version 19-9-2
  */
 public class ConferenceManagerTest extends BaseJunit4Test {
-    private ConferenceManager conferenceManager = new ConferenceManager(new DefaultTrackFactory());
+    private ConferenceManager conferenceManager = ConferenceManager.newConferenceManager();
 
     @Before
     public void before() {

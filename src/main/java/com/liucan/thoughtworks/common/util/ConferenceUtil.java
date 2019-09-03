@@ -5,6 +5,7 @@ import com.liucan.thoughtworks.conference.Talk;
 import java.util.List;
 
 /**
+ * 通用工具类
  * @author liucan
  * @version 19-9-2
  */

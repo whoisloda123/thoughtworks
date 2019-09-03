@@ -3,6 +3,8 @@ package com.liucan.thoughtworks.conference;
 import com.liucan.thoughtworks.conference.session.Session;
 
 /**
+ * 默认track实现类，可添加自己实现类
+ *
  * @author liucan
  * @version 19-9-3
  */

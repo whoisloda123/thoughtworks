@@ -1,6 +1,7 @@
 package com.liucan.thoughtworks;
 
 import com.liucan.thoughtworks.common.exception.BizException;
+import com.liucan.thoughtworks.conference.DefaultTrackFactory;
 import com.liucan.thoughtworks.conference.Talk;
 import com.liucan.thoughtworks.conference.Track;
 import com.liucan.thoughtworks.conference.TrackFactory;
@@ -12,7 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 会议管理
+ * 会议管理类
+ * 直接调用ConferenceManager.tracks传入文件名即可
+ *
  * @author liucan
  * @version 19-9-2
  */
@@ -22,6 +25,10 @@ public class ConferenceManager {
 
     public ConferenceManager(TrackFactory trackFactory) {
         this.trackFactory = trackFactory;
+    }
+
+    public static ConferenceManager newConferenceManager() {
+        return new ConferenceManager(new DefaultTrackFactory());
     }
 
     /**

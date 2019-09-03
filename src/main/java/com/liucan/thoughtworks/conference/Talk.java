@@ -1,6 +1,8 @@
 package com.liucan.thoughtworks.conference;
 
 /**
+ * 如Writing Fast Tests Against Enterprise Rails 60min用talk类表示
+ *
  * @author liucan
  * @version 19-9-1
  */
