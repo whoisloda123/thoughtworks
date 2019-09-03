@@ -20,7 +20,7 @@ public class DefaultSessionStrategy implements SessionStrategy {
     private int totalPossibleTracks;
 
     /**
-     * 根据传入的talksList获取所有可能的morningSession
+     * 根据传入排序好的talksList获取所有可能的morningSession
      */
     @Override
     public List<Session> morningSession(List<Talk> talksList) {
@@ -69,7 +69,7 @@ public class DefaultSessionStrategy implements SessionStrategy {
     }
 
     /**
-     * 根据传入的talksList获取所有可能的afternoonSession
+     * 根据传入排序好的talksList获取所有可能的afternoonSession
      */
     @Override
     public List<Session> afternoonSession(List<Talk> talksList) {
