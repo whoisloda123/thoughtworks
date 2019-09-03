@@ -31,7 +31,6 @@ public class ConferenceManagerTest extends BaseJunit4Test {
             System.out.println("未分配成功！");
             return;
         }
-        String s = conferenceManager.toString();
-        System.out.println(s);
+        System.out.println(conferenceManager.toString());
     }
 }

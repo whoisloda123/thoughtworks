@@ -30,14 +30,11 @@ public class DefaultSessionStrategy implements SessionStrategy {
         List<Session> sessions = new ArrayList<>();
 
         for (int i = 0; i < talksList.size(); i++) {
-            int start = i;
             int totalTime = 0;
             List<Talk> possibleCombinationList = new ArrayList<>();
 
-            while (start != talksList.size()) {
-                int currentCount = start;
-                start++;
-                Talk currentTalk = talksList.get(currentCount);
+            for (int j = i; j < talksList.size(); j++) {
+                Talk currentTalk = talksList.get(j);
                 if (currentTalk.isArrange()) {
                     continue;
                 }
@@ -83,14 +80,11 @@ public class DefaultSessionStrategy implements SessionStrategy {
         List<Session> sessions = new ArrayList<>();
 
         for (int i = 0; i < talksList.size(); i++) {
-            int start = i;
             int totalTime = 0;
             List<Talk> possibleCombinationList = new ArrayList<>();
 
-            while (start != talksList.size()) {
-                int currentCount = start;
-                start++;
-                Talk currentTalk = talksList.get(currentCount);
+            for (int j = i; j < talksList.size(); j++) {
+                Talk currentTalk = talksList.get(j);
                 if (currentTalk.isArrange()) {
                     continue;
                 }
