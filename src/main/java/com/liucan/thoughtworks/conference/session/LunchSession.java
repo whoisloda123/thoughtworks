@@ -1,20 +1,20 @@
-package com.liucan.thoughtworks.session;
+package com.liucan.thoughtworks.conference.session;
 
-import com.liucan.thoughtworks.talk.Talk;
+import com.liucan.thoughtworks.conference.Talk;
 
 import java.util.Collections;
 import java.util.List;
 
 /**
- * 交友session，只包含一个session
+ * 将lunch也当做session统一管理，只包含一个talk
  *
  * @author liucan
  * @version 19-9-2
  */
-public class NetworkingEvnetSession implements Session {
+public class LunchSession implements Session {
     private Talk talk;
 
-    public NetworkingEvnetSession(Talk talk) {
+    public LunchSession(Talk talk) {
         this.talk = talk;
     }
 

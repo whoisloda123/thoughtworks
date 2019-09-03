@@ -1,4 +1,4 @@
-package com.liucan.thoughtworks.talk;
+package com.liucan.thoughtworks.conference;
 
 /**
  * @author liucan

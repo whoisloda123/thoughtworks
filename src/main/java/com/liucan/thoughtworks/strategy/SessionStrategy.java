@@ -1,7 +1,7 @@
 package com.liucan.thoughtworks.strategy;
 
-import com.liucan.thoughtworks.session.Session;
-import com.liucan.thoughtworks.talk.Talk;
+import com.liucan.thoughtworks.conference.Talk;
+import com.liucan.thoughtworks.conference.session.Session;
 
 import java.util.List;
 

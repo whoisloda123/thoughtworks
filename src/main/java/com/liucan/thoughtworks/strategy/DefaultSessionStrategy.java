@@ -1,16 +1,17 @@
 package com.liucan.thoughtworks.strategy;
 
-import com.liucan.thoughtworks.session.AfternoonSession;
-import com.liucan.thoughtworks.session.MorningSession;
-import com.liucan.thoughtworks.session.Session;
-import com.liucan.thoughtworks.talk.Talk;
-import com.liucan.thoughtworks.util.ConferenceUtil;
+import com.liucan.thoughtworks.common.util.ConferenceUtil;
+import com.liucan.thoughtworks.conference.Talk;
+import com.liucan.thoughtworks.conference.session.AfternoonSession;
+import com.liucan.thoughtworks.conference.session.MorningSession;
+import com.liucan.thoughtworks.conference.session.Session;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 默认session策略类
+ * 默认session策略类,可通过继承SessionStrategy实现其他获取morningSession和afternoonSession的策略类
+ *
  *
  * @author liucan
  * @version 19-9-2
@@ -20,7 +21,7 @@ public class DefaultSessionStrategy implements SessionStrategy {
     private int totalPossibleTracks;
 
     /**
-     * 根据传入的talksList获取所有可能的上午session
+     * 根据传入的talksList获取所有可能的morningSession
      */
     @Override
     public List<Session> morningSession(List<Talk> talksList) {
@@ -72,7 +73,7 @@ public class DefaultSessionStrategy implements SessionStrategy {
     }
 
     /**
-     * 根据传入的talksList获取所有可能的下午session
+     * 根据传入的talksList获取所有可能的afternoonSession
      */
     @Override
     public List<Session> afternoonSession(List<Talk> talksList) {

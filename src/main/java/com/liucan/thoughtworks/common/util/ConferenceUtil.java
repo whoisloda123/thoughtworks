@@ -1,6 +1,6 @@
-package com.liucan.thoughtworks.util;
+package com.liucan.thoughtworks.common.util;
 
-import com.liucan.thoughtworks.talk.Talk;
+import com.liucan.thoughtworks.conference.Talk;
 
 import java.util.List;
 

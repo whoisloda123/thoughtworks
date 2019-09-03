@@ -1,20 +1,20 @@
-package com.liucan.thoughtworks.session;
+package com.liucan.thoughtworks.conference.session;
 
-import com.liucan.thoughtworks.talk.Talk;
+import com.liucan.thoughtworks.conference.Talk;
 
 import java.util.List;
 
 /**
- * 上午session
+ * afternoonSession包含多个talks
  *
  * @author liucan
  * @version 19-9-2
  */
-public class MorningSession implements Session {
+public class AfternoonSession implements Session {
 
     private List<Talk> talks;
 
-    public MorningSession(List<Talk> talks) {
+    public AfternoonSession(List<Talk> talks) {
         this.talks = talks;
     }
 

@@ -1,11 +1,11 @@
-package com.liucan.thoughtworks.session;
+package com.liucan.thoughtworks.conference.session;
 
-import com.liucan.thoughtworks.talk.Talk;
+import com.liucan.thoughtworks.conference.Talk;
 
 import java.util.List;
 
 /**
- * 会议session，包含早上和下午session,每个session包含多个talk
+ * 会议session接口,一个session包含多个talks
  *
  * @author liucan
  * @version 19-9-2

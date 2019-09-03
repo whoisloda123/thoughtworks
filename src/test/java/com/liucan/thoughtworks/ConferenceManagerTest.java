@@ -1,7 +1,7 @@
 package com.liucan.thoughtworks;
 
-import com.liucan.thoughtworks.strategy.DefaultSessionStrategy;
-import com.liucan.thoughtworks.track.Track;
+import com.liucan.thoughtworks.conference.DefaultTrackFactory;
+import com.liucan.thoughtworks.conference.Track;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import java.util.List;
  * @version 19-9-2
  */
 public class ConferenceManagerTest extends BaseJunit4Test {
-    private ConferenceManager conferenceManager = new ConferenceManager(new DefaultSessionStrategy());
+    private ConferenceManager conferenceManager = new ConferenceManager(new DefaultTrackFactory());
 
     @Before
     public void before() {
