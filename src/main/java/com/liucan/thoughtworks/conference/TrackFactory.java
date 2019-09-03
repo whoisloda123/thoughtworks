@@ -8,5 +8,8 @@ import java.util.List;
  */
 public interface TrackFactory {
 
+    /**
+     * 通过传入的talk返回不同的track
+     */
     List<Track> newTracks(List<Talk> talkList);
 }

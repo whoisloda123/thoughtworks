@@ -39,6 +39,7 @@ public class DefaultTrackFactory implements TrackFactory {
 
         //如果talkList还不为空,则分配不成功
         if (!talkList.isEmpty()) {
+            System.out.println("还剩下未分配的talkList：" + talkList.toString());
             return Collections.emptyList();
         }
 
