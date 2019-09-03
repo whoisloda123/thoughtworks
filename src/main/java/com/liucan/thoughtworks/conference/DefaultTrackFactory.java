@@ -83,7 +83,7 @@ public class DefaultTrackFactory implements TrackFactory {
             networkingTalk.setStartTime(scheduledTime);
             NetworkingEventSession networkingEventSession = new NetworkingEventSession(networkingTalk);
 
-            tracks.add(new Track(mornSession, lunchSession, afternoonSession, networkingEventSession));
+            tracks.add(new DefaultTrack(mornSession, lunchSession, afternoonSession, networkingEventSession));
         }
         return tracks;
     }

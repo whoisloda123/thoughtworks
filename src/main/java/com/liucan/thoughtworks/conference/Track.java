@@ -8,27 +8,24 @@ import com.liucan.thoughtworks.conference.session.Session;
  * @author liucan
  * @version 19-9-2
  */
-public class Track {
-    private final Session morningSession;
-    private final Session lunchSession;
-    private final Session afternoonSession;
-    private final Session networkingSession;
+public interface Track {
+    /**
+     * 返回morning session
+     */
+    Session morningSession();
 
-    public Track(Session morningSession,
-                 Session lunchSession,
-                 Session afternoonSession,
-                 Session networkingSession) {
-        this.morningSession = morningSession;
-        this.lunchSession = lunchSession;
-        this.afternoonSession = afternoonSession;
-        this.networkingSession = networkingSession;
-    }
+    /**
+     * 返回lunch session
+     */
+    Session lunchSession();
 
-    @Override
-    public String toString() {
-        return morningSession.toString()
-                + lunchSession.toString()
-                + afternoonSession.toString()
-                + networkingSession.toString();
-    }
+    /**
+     * 返回afternoon session
+     */
+    Session afternoonSession();
+
+    /**
+     * 返回networking event session
+     */
+    Session networkingEventSession();
 }
