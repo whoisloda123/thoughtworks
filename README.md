@@ -8,6 +8,7 @@
    5. 从剩下的里面找到满足duration加起来大于等于180小于240的组合 (the evening sessions的时间需要 180 >= the evening sessions <= 240)  
    6. 如果集合里面还有剩余，则分配失败  
    7. track类包含多个session类，session类包含多个talk类  
+   8. TrackFactory提供track工厂类，SessionStrategy提供生成morningSession和afternoonSession实现  
 二.如何使用  
    1. 调用ConferenceManager.tracks传入文件名即可，或者直接调用TrackFactory.newTracks传入构造好的List<Talk>  
 三.如何测试    

@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class DefaultTrackFactory implements TrackFactory {
     @Override
     public List<Track> newTracks(List<Talk> talkList) {
         //先排序
-        //talkList.sort(Comparator.comparing(Talk::getDuration).reversed());
+        talkList.sort(Comparator.comparing(Talk::getDuration).reversed());
 
         int totalPossibleTracks = ConferenceUtil.getTotalTalksTime(talkList) / (6 * 60);
         sessionStrategy.setTotalPossibleTracks(totalPossibleTracks);
